@@ -1,0 +1,17 @@
+sudo: required
+dist: trusty
+
+language: python
+
+services:
+  - docker
+
+install:
+  - docker build -t nvget .
+
+script:
+    - docker run --rm -e NVGET_USER -e NVGET_PASSWORD -u "${UID}" -v "${PWD}:/download" nvget "https://developer.nvidia.com/compute/machine-learning/nccl/secure/v2.1/prod/nccl_2.1.2-1+cuda8.0_x86_64"
+
+env:
+  global:
+    secure: uAn47c2gMjk2c7RY+p5DR5B/zsG1KJJMzs+HpIv0izTJP0IjIb3srEzVJDgIuJT7iKGIiLvM9HiQplH0Zh9Pei1TwMPHlSOE+ZZFbz17TyfQGSCzYy3LuHPxreZhMaampNoU6g/5EY0jgWVaYqzJQftshOQnH9DDgC0RQ2Y1NfPoJKQJJ1Rxcn+EbC+le/vWz9GEyxdDB0uOo5AcaX9g1GUOqnNHwcigTpr2XFBTuO72Jg8QwDxI0qEPSTcU7o9IzN4o32BXKTKSKkn5HhOSakz1CeAOfwLkY0yJ+Sd0pzHvogS8oSNdaQLy2nzBdGKIvE6wjp3i4gmejc3mkA6OsW4z+VDpsgatp9Q7NyO3O8GPplUElq/wXFPVNNaQ2+3TXqqgbsVtDOP2KoWGmNxmKPDIeXSOdpmC9wH8iXUnuD6h/HZph4wrEhMIV7PnAmPQmL0ryl+6xC187fpgc9dH+AALR4oQmNtOxwSesCzlNrIGql+pSuN06ZZ6JD9pOWzSuqSaYYzY3w1JFCxj2wxtWDMKY7Vo1lY9umTL3tXD4JNkC1qrWJcvfl2gRqnnw0Qs/GEy/OnpnirvBFYrpqEFZGBaOaCJuMc8fcohrmWlHmF5waXTj96XjZ1MU0pWCeaDW7wBv4B+yfACGAIR5Nh3zolrRdRvNrbqhXAn3cqgeR8=
