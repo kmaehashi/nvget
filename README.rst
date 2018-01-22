@@ -1,6 +1,9 @@
 nvget
 =====
 
+A script to download assets from `NVIDIA Developer https://developer.nvidia.com/`_ website.
+You need to have a valid NVIDIA Developer account, have enrolled to the program required to download the asset and have agreed with the terms of the corresponding license agreement.
+
 Requirements
 ------------
 
