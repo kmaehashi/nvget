@@ -108,21 +108,30 @@ def iframe(driver, frame_id):
 
 class login_iframe_is_ready(object):
     def __call__(self, driver):
-        with iframe(driver, 'dz-auth-modal-iframe'):
-            driver.find_element_by_id('dz-auth-form-login-button-next')
-            return True
-        return False
+        try:
+            auth_iframe = iframe(driver, 'dz-auth-modal-iframe')
+        except:
+            return False
+
+        with auth_iframe:
+            return 0 < len(driver.find_elements_by_id(
+                'dz-auth-form-login-button-next'))
 
 
 class login_response_is_ready(object):
     def __call__(self, driver):
         # Login succeed if logout link is available.
-        if len(driver.find_elements_by_xpath('//a[@href="/user/logout"]')):
+        if 0 < len(driver.find_elements_by_xpath('//a[@href="/user/logout"]')):
             return True
 
+        try:
+            auth_iframe = iframe(driver, 'dz-auth-modal-iframe')
+        except:
+            return False
+
         # Login failed if error flag is available.
-        with iframe(driver, 'dz-auth-modal-iframe'):
-            if len(driver.find_elements_by_id(
+        with auth_iframe:
+            if 0 < len(driver.find_elements_by_id(
                     'dz-auth-form-login-password-error-flag')):
                 return True
 
