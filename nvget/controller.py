@@ -6,6 +6,7 @@ import contextlib
 
 import requests
 import selenium
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support.ui import WebDriverWait
 
 
@@ -109,13 +110,11 @@ def iframe(driver, frame_id):
 class login_iframe_is_ready(object):
     def __call__(self, driver):
         try:
-            auth_iframe = iframe(driver, 'dz-auth-modal-iframe')
-        except:
+            with iframe(driver, 'dz-auth-modal-iframe'):
+                return 0 < len(driver.find_elements_by_id(
+                    'dz-auth-form-login-button-next'))
+        except StaleElementReferenceException:
             return False
-
-        with auth_iframe:
-            return 0 < len(driver.find_elements_by_id(
-                'dz-auth-form-login-button-next'))
 
 
 class login_response_is_ready(object):
@@ -124,15 +123,12 @@ class login_response_is_ready(object):
         if 0 < len(driver.find_elements_by_xpath('//a[@href="/user/logout"]')):
             return True
 
-        try:
-            auth_iframe = iframe(driver, 'dz-auth-modal-iframe')
-        except:
-            return False
-
         # Login failed if error flag is available.
-        with auth_iframe:
-            if 0 < len(driver.find_elements_by_id(
-                    'dz-auth-form-login-password-error-flag')):
-                return True
+        try:
+            with iframe(driver, 'dz-auth-modal-iframe'):
+                return 0 < len(driver.find_elements_by_id(
+                    'dz-auth-form-login-password-error-flag'))
+        except StaleElementReferenceException:
+            return False
 
         return False
