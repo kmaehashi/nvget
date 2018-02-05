@@ -31,11 +31,9 @@ def nvget(args=None):
         help='operation timeout in seconds')
     parser.add_argument(
         '--chrome', type=str,
-        default='/opt/google/chrome/google-chrome',
         help='path to google-chrome (NVGET_CHROME)')
     parser.add_argument(
         '--driver', type=str,
-        default='/usr/bin/chromedriver',
         help='path to chromedriver (NVGET_DRIVER)')
     parser.add_argument(
         '--output', type=str,

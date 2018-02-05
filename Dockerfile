@@ -22,6 +22,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     ${CHROME_VERSION:-google-chrome-stable} \
   && rm /etc/apt/sources.list.d/google-chrome.list \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+ENV NVGET_CHROME /opt/google/chrome/google-chrome
 
 # Install Chrome Driver.
 # c.f. https://github.com/SeleniumHQ/docker-selenium/blob/master/NodeChrome/Dockerfile.txt
@@ -35,6 +36,7 @@ RUN CD_VERSION=$(if [ ${CHROME_DRIVER_VERSION:-latest} = "latest" ]; then echo $
   && mv /opt/selenium/chromedriver /opt/selenium/chromedriver-$CD_VERSION \
   && chmod 755 /opt/selenium/chromedriver-$CD_VERSION \
   && sudo ln -fs /opt/selenium/chromedriver-$CD_VERSION /usr/bin/chromedriver
+ENV NVGET_DRIVER /usr/bin/chromedriver
 
 # Install nvget package.
 COPY . /nvget
