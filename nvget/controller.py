@@ -2,11 +2,11 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals  # NOQA
 
-import contextlib
-
 import requests
 import selenium
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 
@@ -42,19 +42,18 @@ class Controller(object):
 
             # Wait for the login form to be drawn.
             WebDriverWait(driver, self._timeout).until(
-                login_iframe_is_ready()
+                EC.element_to_be_clickable(
+                    (By.ID, 'dz-auth-form-login-button-next'))
             )
 
             # Fill in the form and submit.
-            with iframe(driver, 'dz-auth-modal-iframe'):
-                driver.find_element_by_id(
-                    'dz-auth-form-login-email').send_keys(email)
-                driver.find_element_by_id(
-                    'dz-auth-form-login-password').send_keys(password)
-                driver.find_element_by_id(
-                    'dz-auth-form-login-button-next').click()
+            driver.find_element_by_id(
+                'dz-auth-form-login-email').send_keys(email)
+            driver.find_element_by_id(
+                'dz-auth-form-login-password').send_keys(password)
+            driver.find_element_by_id(
+                'dz-auth-form-login-button-next').click()
 
-            # Wait for the login process to complete.
             WebDriverWait(driver, self._timeout).until(
                 login_response_is_ready()
             )
@@ -66,9 +65,8 @@ class Controller(object):
                 return
 
             # Login failed.
-            with iframe(driver, 'dz-auth-modal-iframe'):
-                raise AuthenticationError(driver.find_element_by_id(
-                    'dz-auth-form-login-password-error-flag').text)
+            raise AuthenticationError(driver.find_element_by_id(
+                'dz-auth-form-login-password-error-flag').text)
 
         finally:
             driver.quit()
@@ -98,25 +96,6 @@ class Controller(object):
                 f.write(chunk)
 
 
-@contextlib.contextmanager
-def iframe(driver, frame_id):
-    driver.switch_to_frame(driver.find_element_by_id(frame_id))
-    try:
-        yield
-    finally:
-        driver.switch_to_default_content()
-
-
-class login_iframe_is_ready(object):
-    def __call__(self, driver):
-        try:
-            with iframe(driver, 'dz-auth-modal-iframe'):
-                return 0 < len(driver.find_elements_by_id(
-                    'dz-auth-form-login-button-next'))
-        except StaleElementReferenceException:
-            return False
-
-
 class login_response_is_ready(object):
     def __call__(self, driver):
         # Login succeed if logout link is available.
@@ -125,9 +104,8 @@ class login_response_is_ready(object):
 
         # Login failed if error flag is available.
         try:
-            with iframe(driver, 'dz-auth-modal-iframe'):
-                return 0 < len(driver.find_elements_by_id(
-                    'dz-auth-form-login-password-error-flag'))
+            return 0 < len(driver.find_elements_by_id(
+                'dz-auth-form-login-password-error-flag'))
         except StaleElementReferenceException:
             return False
 
