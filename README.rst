@@ -16,6 +16,8 @@ Requirements
 * Google Chrome (with headless support)
 * ChromeDriver
 
+Note: due to the limitation of Google Chrome and ChromeDriver, you cannot run ``nvget`` as a root user.
+
 Run Using Docker
 ----------------
 
