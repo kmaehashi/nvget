@@ -23,7 +23,7 @@ class Controller(object):
         self._timeout = timeout
         self._cookies = None
 
-    def login(self, email, password):
+    def login(self, email, password, nvidia_account):
         options = selenium.webdriver.ChromeOptions()
         options.binary_location = self._chrome_path
         options.add_argument('headless')
@@ -43,8 +43,15 @@ class Controller(object):
             # Wait for the login form to be drawn.
             WebDriverWait(driver, self._timeout).until(
                 EC.element_to_be_clickable(
-                    (By.ID, 'dz-auth-form-login-button-next'))
+                    (By.PARTIAL_LINK_TEXT,
+                     'Log in with my NVIDIA Account'))
             )
+
+            if nvidia_account:
+                raise NotImplementedError('not supported yet')
+            else:
+                driver.find_element_by_partial_link_text(
+                    'Use my older NVIDIA Developer credentials').click()
 
             # Fill in the form and submit.
             driver.find_element_by_id(

@@ -27,6 +27,10 @@ def nvget(args=None):
         '--password', type=str,
         help='password (NVGET_PASSWORD)')
     parser.add_argument(
+        '--nvidia-account', action='store_true', default=False,
+        help='use credentials of NVIDIA account instead of NVIDIA Developer '
+             'account')
+    parser.add_argument(
         '--timeout', type=int, default=15,
         help='operation timeout in seconds')
     parser.add_argument(
@@ -59,7 +63,7 @@ def nvget(args=None):
 
     _print('Logging in...')
     ctrl = Controller(args.chrome, args.driver, int(args.timeout))
-    ctrl.login(args.user, args.password)
+    ctrl.login(args.user, args.password, args.nvidia_account)
 
     _print('Downloading {} to {}...'.format(args.url, args.output))
     ctrl.download_to(args.url, args.output)
