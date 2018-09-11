@@ -1,0 +1,9 @@
+FROM kmaehashi/nvget:latest
+
+# Install nvget package.
+COPY . /nvget
+WORKDIR /nvget
+RUN pip install -U .
+
+# Switch to the download directory.
+WORKDIR /download
