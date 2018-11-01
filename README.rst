@@ -37,9 +37,6 @@ It is recommended to run ``nvget`` using the Docker image hosted on `DockerHub <
   # Download the file.
   nvget-docker "https://developer.nvidia.com/compute/machine-learning/nccl/secure/v2.1/prod/nccl_2.1.2-1+cuda8.0_x86_64"
 
-Due to the limitation of Google Chrome and ChromeDriver, ``nvget`` cannot be run as a root user.
-If you are running the image in ``root`` user privilege, replace ``${UID}`` with any other non-root UID.
-
 Development
 -----------
 

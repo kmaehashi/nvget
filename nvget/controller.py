@@ -27,6 +27,7 @@ class Controller(object):
         options = selenium.webdriver.ChromeOptions()
         options.binary_location = self._chrome_path
         options.add_argument('headless')
+        options.add_argument('--no-sandbox')
 
         driver = selenium.webdriver.Chrome(
             executable_path=self._driver_path,
